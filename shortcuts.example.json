@@ -1,0 +1,43 @@
+{
+  "groups": [
+    {
+      "name": "SSH",
+      "shortcuts": [
+        {
+          "name": "Servidor Web",
+          "command": "ssh usuario@grupo@web.exemplo.local@10.0.0.1",
+          "icon": "Globe24",
+          "favorite": true
+        },
+        {
+          "name": "Banco de Dados",
+          "command": "ssh usuario@grupo@db.exemplo.local@10.0.0.1",
+          "icon": "Database24",
+          "favorite": false
+        }
+      ]
+    },
+    {
+      "name": "Local",
+      "shortcuts": [
+        {
+          "name": "Ver rotas",
+          "command": "route print",
+          "icon": "DataHistogram24",
+          "favorite": false
+        }
+      ]
+    }
+  ],
+  "dns_servers": [
+    "192.168.0.10",
+    "192.168.0.11"
+  ],
+  "ssh_defaults": {
+    "id": "",
+    "jump_proxy": ""
+  },
+  "history": [],
+  "favorite_order": [],
+  "theme": "System"
+}

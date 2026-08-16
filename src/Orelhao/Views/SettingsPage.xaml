@@ -1,0 +1,94 @@
+<Page x:Class="Orelhao.Views.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Configurações"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,16,24,16">
+        <StackPanel MaxWidth="720" HorizontalAlignment="Left">
+            <TextBlock Text="Configurações" FontSize="26" FontWeight="SemiBold" Margin="0,0,0,16" />
+
+            <!-- Tema -->
+            <ui:CardControl Icon="{ui:SymbolIcon Color24}" Margin="0,0,0,12">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Text="Tema" FontWeight="SemiBold" FontSize="15" />
+                        <TextBlock x:Name="ThemeSummary"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Border x:Name="ThemeSwatch" Width="24" Height="24" CornerRadius="6"
+                            VerticalAlignment="Center" Margin="0,0,12,0" BorderThickness="1"
+                            BorderBrush="{DynamicResource ControlElevationBorderBrush}" />
+                    <ui:Button Content="Personalizar…" Icon="{ui:SymbolIcon Color24}"
+                               Style="{StaticResource AccentButton}" Click="OnCustomize" Margin="0,0,8,0" />
+                    <ui:Button Content="Restaurar padrão" Icon="{ui:SymbolIcon ArrowReset24}"
+                               Click="OnRestoreTheme" />
+                </StackPanel>
+            </ui:CardControl>
+
+            <!-- Padrões de SSH -->
+            <ui:Card Margin="0,0,0,12" Padding="16">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <ui:SymbolIcon Symbol="Router24" Margin="0,0,10,0" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource OrelhaoAccentBrush}" />
+                        <StackPanel>
+                            <TextBlock Text="Padrões do SSH via proxy" FontWeight="SemiBold" FontSize="15" />
+                            <TextBlock Text="Preenchidos ao criar um atalho novo com o compositor."
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" />
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="Id (cofre) padrão" Margin="0,0,0,2" />
+                    <ui:TextBox x:Name="DefaultIdBox" Margin="0,0,0,10" LostFocus="OnSshDefaultsChanged" />
+                    <TextBlock Text="ProxyJump padrão" Margin="0,0,0,2" />
+                    <ui:TextBox x:Name="DefaultJumpBox" LostFocus="OnSshDefaultsChanged" />
+                </StackPanel>
+            </ui:Card>
+
+            <!-- DNS internos -->
+            <ui:Card Padding="16">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                        <ui:SymbolIcon Symbol="Globe24" Margin="0,0,10,0" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource OrelhaoAccentBrush}" />
+                        <StackPanel>
+                            <TextBlock Text="Servidores DNS internos" FontWeight="SemiBold" FontSize="15" />
+                            <TextBlock Text="Usados na Consulta de IP para resolver nomes privados da rede."
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <ItemsControl x:Name="DnsList" Margin="0,8,0,8">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon Grid.Column="0" Symbol="Server24" Margin="0,0,10,0"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding}" VerticalAlignment="Center"
+                                               FontFamily="{StaticResource MonoFont}" />
+                                    <ui:Button Grid.Column="2" Icon="{ui:SymbolIcon Delete24}"
+                                               Appearance="Secondary" Padding="8,4"
+                                               ToolTip="Remover" Click="OnRemoveDns" Tag="{Binding}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <ui:TextBox x:Name="NewDnsBox" Width="220" PlaceholderText="Ex.: 10.0.0.1"
+                                    FontFamily="{StaticResource MonoFont}" Margin="0,0,8,0" />
+                        <ui:Button Content="Adicionar" Icon="{ui:SymbolIcon Add24}" Click="OnAddDns" />
+                    </StackPanel>
+                </StackPanel>
+            </ui:Card>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

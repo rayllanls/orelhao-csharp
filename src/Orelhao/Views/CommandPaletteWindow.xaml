@@ -1,0 +1,57 @@
+<ui:FluentWindow x:Class="Orelhao.Views.CommandPaletteWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="Buscar atalho"
+                 Width="560" Height="480"
+                 WindowStartupLocation="CenterOwner"
+                 ShowInTaskbar="False"
+                 ExtendsContentIntoTitleBar="True"
+                 WindowBackdropType="Mica"
+                 WindowCornerPreference="Round"
+                 ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="Buscar atalho"
+                     ShowMaximize="False" ShowMinimize="False" />
+
+        <StackPanel Grid.Row="1" Margin="16,4,16,12">
+            <ui:TextBox x:Name="SearchBox"
+                        PlaceholderText="Digite o nome do atalho e Enter para executar…"
+                        Icon="{ui:SymbolIcon Search24}"
+                        TextChanged="OnSearchChanged" />
+            <TextBlock Text="Lançador rápido: encontre e execute qualquer atalho sem sair do teclado (↑ ↓ para navegar, Enter executa, Esc fecha)."
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       FontSize="11" TextWrapping="Wrap" Margin="2,6,0,0" />
+        </StackPanel>
+
+        <TextBlock x:Name="EmptyHint" Grid.Row="2" Visibility="Collapsed"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                   Text="Nenhum atalho cadastrado ainda.&#x0a;Crie atalhos na aba Grupos." />
+
+        <ListBox x:Name="ResultList" Grid.Row="2" Margin="16,0,16,16"
+                 BorderThickness="0" Background="Transparent"
+                 MouseDoubleClick="OnRunSelected">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="4">
+                        <ui:SymbolIcon Symbol="{Binding Icon, Converter={StaticResource IconToSymbol}}"
+                                       Foreground="{DynamicResource OrelhaoAccentBrush}"
+                                       FontSize="20" Margin="0,0,10,0" VerticalAlignment="Center" />
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding GroupName}" FontSize="11"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</ui:FluentWindow>

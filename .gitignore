@@ -1,0 +1,25 @@
+# Dados locais — o shortcuts.json guarda matrículas, hosts internos e IPs
+# reais da rede. Nunca versionar. O modelo fictício é o shortcuts.example.json.
+*.json
+!shortcuts.example.json
+*.json.bak
+*.tmp
+
+# Segredos
+.env
+.env.*
+*.pem
+*.key
+id_rsa*
+
+# Notas locais — README e CLAUDE são a exceção, o resto de .md fica fora
+*.md
+!README.md
+!CLAUDE.md
+
+# .NET / C#
+bin/
+obj/
+.vs/
+*.user
+publish/

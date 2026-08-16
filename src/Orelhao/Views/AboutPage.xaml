@@ -1,0 +1,25 @@
+<Page x:Class="Orelhao.Views.AboutPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Sobre"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <Grid Margin="32">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="440">
+            <Image Source="pack://application:,,,/Assets/icon.png" Width="96" Height="96" />
+            <TextBlock Text="Orelhão" FontSize="28" FontWeight="SemiBold"
+                       HorizontalAlignment="Center" Margin="0,16,0,0" />
+            <TextBlock x:Name="VersionText" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       HorizontalAlignment="Center" Margin="0,2,0,0" />
+            <TextBlock TextWrapping="Wrap" TextAlignment="Center" Margin="0,16,0,0"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       Text="Gerenciador de atalhos de terminal para Windows. Guarda comandos (SSH e quaisquer outros) em grupos e abre cada um numa janela nova." />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,24,0,0">
+                <ui:Button Content="GitHub" Icon="{ui:SymbolIcon Code24}"
+                           Click="OnGithubClick" Margin="0,0,8,0" />
+                <ui:Button Content="Autor" Icon="{ui:SymbolIcon Person24}"
+                           Click="OnAuthorClick" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

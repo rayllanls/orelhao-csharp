@@ -1,0 +1,105 @@
+<Page x:Class="Orelhao.Views.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Início"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,16,24,16">
+        <StackPanel>
+            <!-- Saudação -->
+            <TextBlock Text="Orelhão" FontSize="30" FontWeight="Bold" />
+            <TextBlock Text="Seus atalhos de terminal, a um clique." FontSize="14"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,20" />
+
+            <!-- Contadores -->
+            <UniformGrid Rows="1" Margin="0,0,0,20">
+                <ui:Card Margin="0,0,8,0" Padding="18">
+                    <StackPanel>
+                        <TextBlock x:Name="GroupCount" Text="0" FontSize="30" FontWeight="Bold"
+                                   Foreground="{DynamicResource OrelhaoAccentBrush}" />
+                        <TextBlock Text="Grupos" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                </ui:Card>
+                <ui:Card Margin="8,0" Padding="18">
+                    <StackPanel>
+                        <TextBlock x:Name="ShortcutCount" Text="0" FontSize="30" FontWeight="Bold"
+                                   Foreground="{DynamicResource OrelhaoAccentBrush}" />
+                        <TextBlock Text="Atalhos" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                </ui:Card>
+                <ui:Card Margin="8,0,0,0" Padding="18">
+                    <StackPanel>
+                        <TextBlock x:Name="FavoriteCount" Text="0" FontSize="30" FontWeight="Bold"
+                                   Foreground="{DynamicResource OrelhaoAccentBrush}" />
+                        <TextBlock Text="Favoritos" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                </ui:Card>
+            </UniformGrid>
+
+            <!-- Ações rápidas -->
+            <TextBlock Text="Ações rápidas" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10" />
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                <ui:Button Content="Buscar atalho (Ctrl+K)" Icon="{ui:SymbolIcon Search24}"
+                           Style="{StaticResource AccentButton}" Click="OnSearch" Margin="0,0,8,0" />
+                <ui:Button Content="Novo atalho" Icon="{ui:SymbolIcon Add24}"
+                           Click="OnNewShortcut" Margin="0,0,8,0" />
+                <ui:Button Content="DNS &amp; IP" Icon="{ui:SymbolIcon Globe24}"
+                           Click="OnConsultarIp" />
+            </StackPanel>
+
+            <!-- Favoritos -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                <TextBlock Text="Favoritos" FontSize="16" FontWeight="SemiBold" />
+                <TextBlock x:Name="DragHint" Text="  · arraste para reordenar" FontSize="12"
+                           VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+            <TextBlock x:Name="NoFavorites" Text="Marque a estrela de um atalho para lançá-lo daqui."
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       Visibility="Collapsed" Margin="0,6,0,0" />
+            <ItemsControl x:Name="FavoritesList" Margin="0,8,0,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,10,10" Cursor="Hand" Background="Transparent"
+                                Tag="{Binding}"
+                                MouseLeftButtonUp="OnFavClick"
+                                PreviewMouseLeftButtonDown="OnFavMouseDown"
+                                PreviewMouseMove="OnFavMouseMove"
+                                AllowDrop="True"
+                                DragOver="OnFavDragOver"
+                                Drop="OnFavDrop">
+                            <ui:Card Padding="14" Width="220">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ui:SymbolIcon Grid.Column="0"
+                                                   Symbol="{Binding Icon, Converter={StaticResource IconToSymbol}}"
+                                                   Foreground="{DynamicResource OrelhaoAccentBrush}"
+                                                   FontSize="24" VerticalAlignment="Center" Margin="0,0,10,0" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Medium"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding GroupName}" FontSize="11"
+                                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                    <ui:SymbolIcon Grid.Column="2" Symbol="Play24"
+                                                   Foreground="{DynamicResource OrelhaoAccentBrush}"
+                                                   VerticalAlignment="Center" />
+                                </Grid>
+                            </ui:Card>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

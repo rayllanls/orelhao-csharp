@@ -1,0 +1,115 @@
+<ui:FluentWindow x:Class="Orelhao.Views.ShortcutDialog"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="Atalho"
+                 Width="560" Height="620"
+                 WindowStartupLocation="CenterOwner"
+                 ShowInTaskbar="False"
+                 ExtendsContentIntoTitleBar="True"
+                 WindowBackdropType="Mica"
+                 WindowCornerPreference="Round"
+                 ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="Atalho" ShowMaximize="False" ShowMinimize="False" />
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="24,8,24,8">
+            <StackPanel>
+                <!-- Grupo (só ao criar) -->
+                <StackPanel x:Name="GroupRow" Visibility="Collapsed">
+                    <TextBlock Text="Grupo" Margin="0,4,0,4" FontWeight="Medium" />
+                    <ComboBox x:Name="GroupCombo" HorizontalAlignment="Stretch" />
+                </StackPanel>
+
+                <!-- Nome + ícone -->
+                <TextBlock Text="Nome" Margin="0,16,0,4" FontWeight="Medium" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ui:Button x:Name="IconButton" Grid.Column="0" Width="44" Height="40"
+                               Padding="0" HorizontalContentAlignment="Center"
+                               VerticalContentAlignment="Center"
+                               Margin="0,0,8,0" Click="OnPickIcon" ToolTip="Escolher ícone">
+                        <ui:SymbolIcon x:Name="IconPreview" FontSize="20" />
+                    </ui:Button>
+                    <ui:TextBox x:Name="NameBox" Grid.Column="1"
+                                PlaceholderText="Ex.: Servidor de produção" />
+                </Grid>
+
+                <!-- Comando -->
+                <TextBlock Text="Comando" Margin="0,16,0,4" FontWeight="Medium" />
+                <ui:TextBox x:Name="CommandBox" FontFamily="{StaticResource MonoFont}"
+                            PlaceholderText="Ex.: ssh usuario@servidor"
+                            TextWrapping="Wrap" AcceptsReturn="True" MinHeight="60" />
+
+                <!-- Compositor SSH via proxy -->
+                <ui:CardExpander Margin="0,16,0,0" Icon="{ui:SymbolIcon Router24}">
+                    <ui:CardExpander.Header>
+                        <TextBlock Text="Montar SSH via proxy" FontWeight="Medium" />
+                    </ui:CardExpander.Header>
+                    <StackPanel>
+                        <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   TextWrapping="Wrap" Margin="0,0,0,12"
+                                   Text="Preenche o comando no formato id@conta@servidor@proxyjump. Id e ProxyJump viram o padrão do próximo atalho novo." />
+                        <TextBlock Text="Id (cofre)" Margin="0,0,0,2" />
+                        <ui:TextBox x:Name="SshId" Margin="0,0,0,8" TextChanged="OnSshChanged" />
+                        <TextBlock Text="Conta" Margin="0,0,0,2" />
+                        <ui:TextBox x:Name="SshAccount" Margin="0,0,0,8" TextChanged="OnSshChanged" />
+                        <TextBlock Text="Servidor" Margin="0,0,0,2" />
+                        <ui:TextBox x:Name="SshAddress" Margin="0,0,0,8" TextChanged="OnSshChanged" />
+                        <TextBlock Text="ProxyJump" Margin="0,0,0,2" />
+                        <ui:TextBox x:Name="SshJump" Margin="0,0,0,8" TextChanged="OnSshChanged" />
+                        <ui:Button Content="Aplicar ao comando" Icon="{ui:SymbolIcon ArrowDownload24}"
+                                   Click="OnApplySsh" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </ui:CardExpander>
+
+                <!-- Popup do seletor de ícone -->
+                <Popup x:Name="IconPopup" PlacementTarget="{Binding ElementName=IconButton}"
+                       Placement="Bottom" StaysOpen="False" AllowsTransparency="True">
+                    <Border Background="{DynamicResource ApplicationBackgroundBrush}"
+                            BorderBrush="{DynamicResource ControlElevationBorderBrush}"
+                            BorderThickness="1" CornerRadius="8" Padding="8" Margin="0,4,0,0">
+                        <ItemsControl x:Name="IconGrid" Width="336">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Width="42" Height="42" Margin="2" Tag="{Binding}"
+                                            Padding="0" HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="Transparent" BorderThickness="0"
+                                            Click="OnIconChosen" Cursor="Hand"
+                                            ToolTip="{Binding}">
+                                        <ui:SymbolIcon Symbol="{Binding}" FontSize="20" />
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </Popup>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Rodapé com ações -->
+        <Border Grid.Row="2" BorderBrush="{DynamicResource ControlElevationBorderBrush}"
+                BorderThickness="0,1,0,0" Padding="24,12">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ui:Button Content="Cancelar" Click="OnCancel" Margin="0,0,8,0" MinWidth="90" />
+                <ui:Button x:Name="SaveButton" Content="Salvar" Style="{StaticResource AccentButton}"
+                           Click="OnSave" MinWidth="90" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</ui:FluentWindow>

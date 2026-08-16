@@ -1,0 +1,157 @@
+<Page x:Class="Orelhao.Views.GroupsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:vm="clr-namespace:Orelhao.ViewModels"
+      Title="Grupos"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+
+    <Page.Resources>
+        <!-- Linha de um atalho: ícone, nome/comando e as ações. Handlers ficam
+             no code-behind desta página; por isso o template mora aqui, não num
+             dicionário compartilhado. -->
+        <DataTemplate x:Key="ShortcutRowTemplate" DataType="{x:Type vm:ShortcutViewModel}">
+            <Border x:Name="Row" CornerRadius="6" Padding="8,6" Margin="0,2"
+                    Background="Transparent">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <ui:SymbolIcon Grid.Column="0"
+                                   Symbol="{Binding Icon, Converter={StaticResource IconToSymbol}}"
+                                   Foreground="{DynamicResource OrelhaoAccentBrush}"
+                                   FontSize="22" VerticalAlignment="Center" Margin="4,0,12,0" />
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="14"
+                                   TextTrimming="CharacterEllipsis" />
+                        <TextBlock Text="{Binding Command}" FontSize="12"
+                                   FontFamily="{StaticResource MonoFont}"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <ui:Button Icon="{ui:SymbolIcon Play24}" Style="{StaticResource AccentButton}"
+                                   Padding="10,4" Margin="0,0,8,0" ToolTip="Executar"
+                                   Click="OnRun" Tag="{Binding}" />
+                        <ui:Button Content="{Binding Favorite, Converter={StaticResource FavoriteGlyph}}"
+                                   FontSize="16" Padding="8,2" Margin="0,0,2,0"
+                                   Appearance="Secondary" ToolTip="Favoritar"
+                                   Click="OnToggleFavorite" Tag="{Binding}" />
+                        <ui:Button Icon="{ui:SymbolIcon Edit24}" Appearance="Secondary"
+                                   Padding="8,4" Margin="0,0,2,0" ToolTip="Editar"
+                                   Click="OnEdit" Tag="{Binding}" />
+                        <ui:Button Icon="{ui:SymbolIcon Copy24}" Appearance="Secondary"
+                                   Padding="8,4" Margin="0,0,2,0" ToolTip="Duplicar"
+                                   Click="OnDuplicate" Tag="{Binding}" />
+                        <ui:Button Icon="{ui:SymbolIcon ChevronUp24}" Appearance="Secondary"
+                                   Padding="8,4" Margin="0,0,2,0" ToolTip="Mover para cima"
+                                   Click="OnMoveUp" Tag="{Binding}" />
+                        <ui:Button Icon="{ui:SymbolIcon ChevronDown24}" Appearance="Secondary"
+                                   Padding="8,4" Margin="0,0,2,0" ToolTip="Mover para baixo"
+                                   Click="OnMoveDown" Tag="{Binding}" />
+                        <ui:Button Icon="{ui:SymbolIcon Delete24}" Appearance="Secondary"
+                                   Padding="8,4" ToolTip="Excluir"
+                                   Click="OnDelete" Tag="{Binding}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <DataTemplate.Triggers>
+                <Trigger SourceName="Row" Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Row" Property="Background"
+                            Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+                </Trigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Margin="24,16,24,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Cabeçalho -->
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <TextBlock Text="Grupos" FontSize="26" FontWeight="SemiBold" VerticalAlignment="Center" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <ui:Button Content="Novo grupo" Icon="{ui:SymbolIcon Add24}"
+                           Style="{StaticResource AccentButton}" Click="OnNewGroup" Margin="0,0,8,0" />
+                <ui:Button Content="Novo atalho" Icon="{ui:SymbolIcon Add24}"
+                           Style="{StaticResource AccentButton}" Click="OnNewShortcut" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Busca -->
+        <ui:TextBox x:Name="SearchBox" Grid.Row="1" Margin="0,0,0,12"
+                    PlaceholderText="Buscar atalho por nome, comando ou grupo…"
+                    Icon="{ui:SymbolIcon Search24}"
+                    TextChanged="OnSearchChanged" />
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Padding="0,0,4,16">
+            <Grid>
+                <!-- Estado vazio -->
+                <StackPanel x:Name="EmptyState" HorizontalAlignment="Center" VerticalAlignment="Top"
+                            Margin="0,80,0,0" Visibility="Collapsed">
+                    <TextBlock Text="🕸️" FontSize="48" HorizontalAlignment="Center"
+                               FontFamily="Segoe UI Emoji" />
+                    <TextBlock Text="Nenhum atalho ainda" FontSize="18" FontWeight="Medium"
+                               HorizontalAlignment="Center" Margin="0,12,0,4" />
+                    <TextBlock Text="Crie um grupo e adicione seu primeiro atalho."
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               HorizontalAlignment="Center" />
+                    <ui:Button Content="Criar primeiro grupo" Icon="{ui:SymbolIcon Add24}"
+                               Style="{StaticResource AccentButton}" Click="OnNewGroup"
+                               HorizontalAlignment="Center" Margin="0,16,0,0" />
+                </StackPanel>
+
+                <!-- Visão agrupada (sem busca) -->
+                <ItemsControl x:Name="GroupsList" ItemsSource="{Binding Groups}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:GroupViewModel}">
+                            <ui:CardExpander Margin="0,0,0,10" IsExpanded="True">
+                                <ui:CardExpander.Header>
+                                    <Grid>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="15"
+                                                       VerticalAlignment="Center" />
+                                            <Border Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                                    CornerRadius="10" Padding="8,1" Margin="10,0,0,0"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Shortcuts.Count}" FontSize="11"
+                                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                            </Border>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                                    Margin="0,0,12,0">
+                                            <ui:Button Icon="{ui:SymbolIcon Add24}" ToolTip="Adicionar atalho a este grupo"
+                                                       Appearance="Secondary" Padding="8,4"
+                                                       Click="OnAddToGroup" Tag="{Binding}" Margin="0,0,6,0" />
+                                            <ui:Button Icon="{ui:SymbolIcon Rename24}" ToolTip="Renomear grupo"
+                                                       Appearance="Secondary" Padding="8,4"
+                                                       Click="OnRenameGroup" Tag="{Binding}" Margin="0,0,6,0" />
+                                            <ui:Button Icon="{ui:SymbolIcon Delete24}" ToolTip="Excluir grupo"
+                                                       Appearance="Secondary" Padding="8,4"
+                                                       Click="OnDeleteGroup" Tag="{Binding}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </ui:CardExpander.Header>
+                                <ItemsControl ItemsSource="{Binding Shortcuts}"
+                                              ItemTemplate="{StaticResource ShortcutRowTemplate}" />
+                            </ui:CardExpander>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Resultados de busca (lista plana) -->
+                <ItemsControl x:Name="SearchResults" Visibility="Collapsed"
+                              ItemTemplate="{StaticResource ShortcutRowTemplate}" />
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>
